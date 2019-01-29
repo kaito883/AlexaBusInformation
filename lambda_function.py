@@ -33,13 +33,17 @@ def extractTimeFromString(htmlString):
 
 
 def getNextBusInformation():
-	next_bus_scheduled_time = getNextBusTimeByString(soup, '予定時刻')
-	next_bus_leaving_time = getNextBusTimeByString(soup, '発車予測')
-	next_bus_goal_time = getNextBusTimeByString(soup, '到着予測')
-	text = '次の' + '綱島駅' + '行きのバスは' + '川51' + 'バスです。' \
-			+ 'たるのや' + '予定時刻は、' + next_bus_scheduled_time + 'です。' \
-			+ 'たるのや' + '発車予測は、' + next_bus_leaving_time + 'です。' \
-			+ '綱島駅到着予測時間は' + next_bus_goal_time + 'です。'
+	try:
+		next_bus_scheduled_time = getNextBusTimeByString(soup, '予定時刻')
+		next_bus_leaving_time = getNextBusTimeByString(soup, '発車予測')
+		next_bus_goal_time = getNextBusTimeByString(soup, '到着予測')
+		text = '次の' + '綱島駅' + '行きのバスは' + '川51' + 'バスです。' \
+				+ 'たるのや' + '予定時刻は、' + next_bus_scheduled_time + 'です。' \
+				+ 'たるのや' + '発車予測は、' + next_bus_leaving_time + 'です。' \
+				+ '綱島駅到着予測時間は' + next_bus_goal_time + 'です。'
+	except:
+		text = '60分以内に接近している川51バスはありません。'
+
 	response = {
        'version': '1.0',
        'response': {
