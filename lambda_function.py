@@ -23,6 +23,8 @@ def getNextBusTimeByString(soup, targetTimeString):
 def extractTimeFromString(htmlString):
 	extractedString = str(htmlString)
 	extractedString = extractedString.replace('発車予測', '')
+	extractedString = extractedString.replace('到着予測', '')
+	extractedString = extractedString.replace('予定時刻', '')
 	extractedString = extractedString.replace('<td>', '')
 	extractedString = extractedString.replace('</td>', '')
 	pattern = re.compile(r'\s+')
@@ -31,9 +33,13 @@ def extractTimeFromString(htmlString):
 
 
 def getNextBusInformation():
+	next_bus_scheduled_time = getNextBusTimeByString(soup, '予定時刻')
 	next_bus_leaving_time = getNextBusTimeByString(soup, '発車予測')
 	next_bus_goal_time = getNextBusTimeByString(soup, '到着予測')
-	text = '次の綱島駅行きのバスは' + '川51' + '-' + next_bus_leaving_time + '樽野谷発車予定です。' + '綱島駅到着予定時間は' + next_bus_goal_time + 'です。'
+	text = '次の' + '綱島駅' + '行きのバスは' + '川51' + 'バスです。' \
+			+ 'たるのや' + '予定時刻は、' + next_bus_scheduled_time + 'です。' \
+			+ 'たるのや' + '発車予測は、' + next_bus_leaving_time + 'です。' \
+			+ '綱島駅到着予測時間は' + next_bus_goal_time + 'です。'
 	response = {
        'version': '1.0',
        'response': {
