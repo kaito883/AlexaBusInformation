@@ -4,12 +4,6 @@ from bs4 import BeautifulSoup
 import re
 import json
 
-target_url = 'https://rinkobus.bus-navigation.jp/wgsys/wgp/bus.htm?tabName=searchTab&selectedLandmarkCatCd=&from=%E6%A8%BD%E9%87%8E%E8%B0%B7&fromType=&to=%E7%B6%B1%E5%B3%B6%E9%A7%85&toType=1&locale=ja&fromlat=&fromlng=&tolat=&tolng=&sortBy=3&routeLayoutCd=&fromSignpoleKey=&bsid=1&mapFlag=false&existYn=N'
-r = requests.get(target_url)         #requestsを使って、webから取得
-soup = BeautifulSoup(r.text, 'lxml') #要素を抽出
-
-bus_time = soup.find_all(attrs={"id": "errInfo"})
-
 #print(soup)
 
 def getNextBusTimeByString(soup, targetTimeString):
@@ -33,6 +27,9 @@ def extractTimeFromString(htmlString):
 
 
 def getNextBusInformation():
+	target_url = 'https://rinkobus.bus-navigation.jp/wgsys/wgp/bus.htm?tabName=searchTab&selectedLandmarkCatCd=&from=%E6%A8%BD%E9%87%8E%E8%B0%B7&fromType=&to=%E7%B6%B1%E5%B3%B6%E9%A7%85&toType=1&locale=ja&fromlat=&fromlng=&tolat=&tolng=&sortBy=3&routeLayoutCd=&fromSignpoleKey=&bsid=1&mapFlag=false&existYn=N'
+	r = requests.get(target_url)         #requestsを使って、webから取得
+	soup = BeautifulSoup(r.text, 'lxml') #要素を抽出
 	try:
 		next_bus_scheduled_time = getNextBusTimeByString(soup, '予定時刻')
 		next_bus_leaving_time = getNextBusTimeByString(soup, '発車予測')
