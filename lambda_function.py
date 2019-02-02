@@ -6,10 +6,10 @@ import json
 
 #print(soup)
 
-def getNextBusTimeByString(soup, targetTimeString):
+def get51NextBusTimeByString(soup, td_tag_seq, targetTimeString):
 	next_bus_leaving_time = '***'
 	next_bus_leaving_time_html_list = soup.find_all("td", text=re.compile(targetTimeString))
-	next_bus_leaving_time_html = next_bus_leaving_time_html_list[0]
+	next_bus_leaving_time_html = next_bus_leaving_time_html_list[td_tag_seq]
 	next_bus_leaving_time = extractTimeFromString(next_bus_leaving_time_html)
 	return next_bus_leaving_time
 
@@ -31,13 +31,19 @@ def getNextBusInformation():
 	r = requests.get(target_url)         #requestsを使って、webから取得
 	soup = BeautifulSoup(r.text, 'lxml') #要素を抽出
 	try:
-		next_bus_scheduled_time = getNextBusTimeByString(soup, '予定時刻')
-		next_bus_leaving_time = getNextBusTimeByString(soup, '発車予測')
-		next_bus_goal_time = getNextBusTimeByString(soup, '到着予測')
-		text = '次の' + '綱島駅' + '行きのバスは' + '川51' + 'バスです。' \
-				+ 'たるのや' + '予定時刻は、' + next_bus_scheduled_time + 'です。' \
-				+ 'たるのや' + '発車予測は、' + next_bus_leaving_time + 'です。' \
-				+ '綱島駅到着予測時間は' + next_bus_goal_time + 'です。'
+		next_bus_scheduled_time = get51NextBusTimeByString(soup, 0, '予定時刻')
+		next_bus_leaving_time = get51NextBusTimeByString(soup, 0, '発車予測')
+		next_bus_goal_time = get51NextBusTimeByString(soup, 0, '到着予測')
+		second_bus_scheduled_time = get51NextBusTimeByString(soup, 2, '予定時刻')#'予定時刻'が2つあるためコイツは1つ多くする
+		second_bus_leaving_time = get51NextBusTimeByString(soup, 1, '発車予測')
+		second_bus_goal_time = get51NextBusTimeByString(soup, 1, '到着予測')
+		text = 'たるのや発の' +'綱島駅行き' + '川51' + 'バス情報です。' \
+				+ '直近の予定時刻は' + next_bus_scheduled_time + '、' \
+				+ '発車予測' + next_bus_leaving_time + '、' \
+				+ '綱島駅到着予測時間は' + next_bus_goal_time + 'です。'\
+				+ 'その次のバスは予定時刻' + second_bus_scheduled_time + '、' \
+				+ '発車予測' + second_bus_leaving_time + '、' \
+				+ '綱島駅到着予測時間は' + second_bus_goal_time + 'です。'
 	except:
 		text = '60分以内に接近している川51バスはありません。'
 
