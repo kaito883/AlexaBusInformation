@@ -65,7 +65,7 @@ def getNextBusInformationResponce():
                 'type': 'PlainText',
                 'text': text
             },
-            'shouldEndSession': False
+            'shouldEndSession': True
         }
     }
     return response
@@ -85,7 +85,7 @@ def lambda_handler(event, context):
                     'type': 'PlainText',
                     'text': event['request']['intent']['name']
                 },
-                'shouldEndSession': False
+                'shouldEndSession': True
             }
         }
         return response
